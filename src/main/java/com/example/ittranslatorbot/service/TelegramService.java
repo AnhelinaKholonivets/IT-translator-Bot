@@ -21,15 +21,20 @@ public class TelegramService {
         sendMessage(chatId, text, null);
     }
 
-    public void sendMessage(Long chatId, String text, ReplyKeyboard replyKeyboard) {
-        SendMessage sendMessage = SendMessage
-                .builder()
+    /**
+     * How to write a builder:
+     */
+    public void sendMessage(Long chatId,
+                            String text,
+                            ReplyKeyboard replyKeyboard) {
+        SendMessage sendMessage = SendMessage.builder()
                 .text(text)
                 .chatId(chatId.toString())
                 .parseMode(ParseMode.HTML)
                 .replyMarkup(replyKeyboard)
                 .build();
-        execute(sendMessage);
+
+        execute(sendMessage); // separate main goal of the method from its body.
     }
 
     private void execute(BotApiMethod botApiMethod) {

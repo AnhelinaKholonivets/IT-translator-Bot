@@ -13,21 +13,24 @@ public class Dispatcher {
     private final List<UserRequestHandler> handlers;
 
     public Dispatcher(List<UserRequestHandler> handlers) {
-        this.handlers = handlers
-                .stream()
-                .sorted(Comparator
-                        .comparing(UserRequestHandler::isGlobal)
+        /**
+         * beautiful way of using Streams.
+         */
+        this.handlers = handlers.stream()
+                .sorted(Comparator.comparing(UserRequestHandler::isGlobal)
                         .reversed())
                 .collect(Collectors.toList());
     }
 
     public boolean dispatch(UserRequest userRequest) {
         for (UserRequestHandler userRequestHandler : handlers) {
-            if(userRequestHandler.isApplicable(userRequest)){
+            if(userRequestHandler.isApplicable(userRequest)) {
+
                 userRequestHandler.handle(userRequest);
                 return true;
             }
         }
+
         return false;
     }
 }

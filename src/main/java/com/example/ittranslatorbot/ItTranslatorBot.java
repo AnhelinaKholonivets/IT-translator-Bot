@@ -26,31 +26,40 @@ public class ItTranslatorBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String textFromUser = update.getMessage().getText();
+            String textFromUser = update.getMessage()
+                    .getText();
 
-            Long userId = update.getMessage().getFrom().getId();
-            String userFirstName = update.getMessage().getFrom().getFirstName();
+            Long userId = update.getMessage()
+                    .getFrom()
+                    .getId();
+
+            String userFirstName = update.getMessage()
+                    .getFrom()
+                    .getFirstName();
 
             log.info("[{}, {}] : {}", userId, userFirstName, textFromUser);
 
             Long chatId = update.getMessage().getChatId();
 
-            UserRequest userRequest = UserRequest
-                    .builder()
+            UserRequest userRequest = UserRequest.builder()
                     .update(update)
                     .chatId(chatId)
                     .build();
 
-            boolean dispatched = dispatcher.dispatch(userRequest);
+//            boolean dispatched = dispatcher.dispatch(userRequest); useless
 
-            if (!dispatched) {
+            if (!dispatcher.dispatch(userRequest)) {
                 log.warn("Unexpected update from user");
             }
+
         } else {
             log.warn("Unexpected update from user");
         }
     }
 
+    /**
+     * We do not like using server methods in POJO classes.
+     */
     @Override
     public String getBotUsername() {
         return botUsername;
